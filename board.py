@@ -27,8 +27,8 @@ class Board:
         self.drawPellet()
         self.drawPellet()
         # add snakes
-        self.s1 = self.Snake(8, 9, 1)
-        self.s2 = self.Snake(self.lSize-8, 9, 2)
+        self.s1 = self.Snake(9, 8, 1)
+        self.s2 = self.Snake(9, self.lSize-8, 2)
         self.drawSnake(self.s1)
         self.drawSnake(self.s2)
 
@@ -67,10 +67,10 @@ class Board:
 
 
     def setBoard(self, l, w):
-        for c in range(l):
+        for r in range(w):
             self.board.append([])
-            for r in range(w):
-                self.board[c].append("BOARD")
+            for c in range(l):
+                self.board[r].append("BOARD")
 
     def getColor(self, arg):
         return self.colorDic.get(arg, WHITE) # white is default case, if it shows its an error
@@ -82,52 +82,82 @@ class Board:
         for r in range(len(self.board)):
             for c in range(len(self.board[r])):
                 color = self.getColor(self.board[r][c])
-                pygame.draw.rect(win, color, (r*self.SIZE, c*self.SIZE, self.SIZE, self.SIZE))
+                pygame.draw.rect(win, color, (c*self.SIZE, r*self.SIZE, self.SIZE, self.SIZE))
         # handles diretions
         self.s1.setAllowed()
         self.s2.setAllowed()
+        print(self.s1.direction)
 
     def drawPellet(self):
         l = random.randint(0, self.lSize-1)
         w = random.randint(0, self.wSize-1)
-        self.board[l][w] = "PELLET"
+        self.board[w][l] = "PELLET"
 
     def drawSnake(self, snake):
         self.board[snake.headR][snake.headC] = "HEAD"
-        self.board[snake.headR][snake.headC - 1] = "BODY"
-        self.board[snake.headR][snake.headC - 2] = "BODY"
-        self.board[snake.headR][snake.headC - 3] = "TAIL"
+        self.board[snake.headR-1][snake.headC] = "BODY"
+        self.board[snake.headR-2][snake.headC] = "BODY"
+        self.board[snake.headR-3][snake.headC] = "TAIL"
+        snake.tailR = snake.headR-3
 
     # --- logic ---
     def moveSnake(self, snake):
         if snake.direction == "DOWN":
-            self.moveDown(snake)
+            self.move(snake, 1, 0)
         elif snake.direction == "UP":
-            self.moveUp(snake)
+            self.move(snake, -1, 0)
         elif snake.direction == "RIGHT":
-            self.moveRight(snake)
+            self.move(snake, 0, 1)
         elif snake.direction == "LEFT":
-            self.moveLeft(snake)
+            self.move(snake, 0 ,-1)
 
-    def moveDown(self, snake):
-        if snake.headR == self.wSize-2:
+    def move(self, snake, r, c):
+        if snake.headR >= self.wSize-1:
             direction = "NULL" # this player loses
         else:
-            self.board[snake.headC][snake.headC] = "BODY"
-            self.board[snake.headR+1][snake.headC] = "HEAD"
+            # checks collisions
+            if self.board[snake.headR + r][snake.headC + c] == "PELLET":
+                pass
+
+            # moves
+            self.board[snake.headR][snake.headC] = "BODY"
+            snake.headR += r
+            snake.headC += c
+            self.board[snake.headR][snake.headC] = "HEAD"
             self.board[snake.tailR][snake.tailC] = "BOARD"
-            self.board[snake.tailR+1][snake.tailC] = "TAIL"
+            self.board[snake.tailR][snake.tailC] = "TAIL"
 
+    def moveDown(self, snake):
+        if snake.headR >= self.wSize-1:
+            direction = "NULL" # this player loses
+        else:
+            # checks collisions
+            if self.board[snake.headR + 1][snake.headC] == "PELLET":
+                pass
 
-
-    def moveUp(self, snake):
-        pass
+            # moves
+            self.board[snake.headR][snake.headC] = "BODY"
+            snake.headR += 1
+            self.board[snake.headR][snake.headC] = "HEAD"
+            self.board[snake.tailR][snake.tailC] = "BOARD"
+            snake.tailR += 1
+            self.board[snake.tailR][snake.tailC] = "TAIL"
 
     def moveRight(self, snake):
-        pass
+        if snake.headR >= self.wSize - 1:
+            direction = "NULL"  # this player loses
+        else:
+            # checks collisions
+            if self.board[snake.headR][snake.headC + 1] == "PELLET":
+                pass
 
-    def moveLeft(self, snake):
-        pass
+            # moves
+            self.board[snake.headR][snake.headC] = "BODY"
+            snake.headC += 1
+            self.board[snake.headR][snake.headC] = "HEAD"
+            self.board[snake.tailR][snake.tailC] = "BOARD"
+            snake.tailC += 1
+            self.board[snake.tailR][snake.tailC] = "TAIL"
 
     # Snake Object
 
@@ -138,7 +168,7 @@ class Board:
             self.headR = r
             self.headC = c
             self.tailR = r-3
-            self.tailC = c-3
+            self.tailC = c
             self.direction = "DOWN"
             self.notAllowed = "UP"
             self.player = p

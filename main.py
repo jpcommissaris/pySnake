@@ -25,10 +25,10 @@ while not done:
     b.setDirection()
 
     # --- repaints screen ---
-    if WAIT > 5:
+    if WAIT > 1:
         screen.fill((255,255,255))
         b.drawBoard(screen)
-        wait = 0
+        WAIT = 0
     WAIT += 1
     # Updates screen with new drawings
     pygame.display.flip()
