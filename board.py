@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 BLACK = (0,0,0) # if board[][] = 0
 GREEN = (0,255,0)
 RED = (255, 0, 0)
@@ -43,28 +44,28 @@ class Board:
         keys=pygame.key.get_pressed()
 
         if keys[pygame.K_s]:
-            if self.s1.notAllowed != "UP":
+            if self.s1.notAllowed != "DOWN":
                 self.s1.direction = "DOWN"
         if keys[pygame.K_w]:
-            if self.s1.notAllowed != "DOWN":
+            if self.s1.notAllowed != "UP":
                 self.s1.direction = "UP"
         if keys[pygame.K_a]:
-            if self.s1.notAllowed != "RIGHT":
+            if self.s1.notAllowed != "LEFT":
                 self.s1.direction = "LEFT"
         if keys[pygame.K_d]:
-            if self.s1.notAllowed != "LEFT":
+            if self.s1.notAllowed != "RIGHT":
                 self.s1.direction = "RIGHT"
         if keys[pygame.K_DOWN]:
-            if self.s2.notAllowed != "UP":
+            if self.s2.notAllowed != "DOWN":
                 self.s2.direction = "DOWN"
         if keys[pygame.K_UP]:
-            if self.s2.notAllowed != "DOWN":
+            if self.s2.notAllowed != "UP":
                 self.s2.direction = "UP"
         if keys[pygame.K_LEFT]:
-            if self.s2.notAllowed != "RIGHT":
+            if self.s2.notAllowed != "LEFT":
                 self.s2.direction = "LEFT"
         if keys[pygame.K_RIGHT]:
-            if self.s2.notAllowed != "LEFT":
+            if self.s2.notAllowed != "RIGHT":
                 self.s2.direction = "RIGHT"
 
     def setBoard(self, l, w):
@@ -90,6 +91,12 @@ class Board:
         # handles diretions
         self.s1.setAllowed()
         self.s2.setAllowed()
+    def drawScores(self, win):
+        font = pygame.font.SysFont("Helvetica", 16)
+        score1 = font.render('Score = ' + str(self.p1), False, GREEN)
+        win.blit(score1, (10, 10))
+        score2 = font.render('Score = ' + str(self.p2), False, GREEN)
+        win.blit(score2, (800, 10))
 
     def drawPellet(self):
         l = random.randint(0, self.lSize-1)
@@ -111,7 +118,9 @@ class Board:
             self.p2 += 1
         if player == 2:
             self.p1 += 1
+        time.sleep(1)
         self.set()
+
     def moveSnake(self, snake):
         if snake.direction == "DOWN":
             self.move(snake, 1, 0)
@@ -126,7 +135,7 @@ class Board:
         if snake.headR >= self.wSize-1 or snake.headR <= 0 or snake.headC >= self.lSize-1 or snake.headC <= 0: # borders
             print("gameover")
             self.gameOver(snake.player)
-
+            return
         else:
             # checks collisions
             if self.board[snake.headR + r][snake.headC + c] == -1: # collides with pellet?
@@ -134,8 +143,9 @@ class Board:
                 snake.size+=5
                 print("collision")
             if self.board[snake.headR + r][snake.headC + c] > 1:
+                self.gameOver(snake.player)
                 print("game over") # call a reset
-
+                return
             # moves
             self.board[snake.headR][snake.headC] = 2 # first body part
             snake.headR += r
