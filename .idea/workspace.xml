@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2b7039ee-8536-4926-947d-213e9e3b7a63" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/board.py" beforeDir="false" afterPath="$PROJECT_DIR$/board.py" afterDir="false" />
-    </list>
+    <list default="true" id="2b7039ee-8536-4926-947d-213e9e3b7a63" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/board.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="161" column="58" selection-start-line="161" selection-start-column="58" selection-end-line="161" selection-end-column="58" />
+            <state relative-caret-position="391">
+              <caret line="23" column="59" selection-start-line="23" selection-start-column="59" selection-end-line="23" selection-end-column="59" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -59,8 +57,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="238" />
-    <option name="y" value="29" />
+    <option name="x" value="160" />
+    <option name="y" value="81" />
     <option name="width" value="1073" />
     <option name="height" value="810" />
   </component>
@@ -170,7 +168,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="238" y="29" width="1073" height="810" extended-state="0" />
+    <frame x="160" y="81" width="1073" height="810" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19296578" />
@@ -250,8 +248,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/board.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="161" column="58" selection-start-line="161" selection-start-column="58" selection-end-line="161" selection-end-column="58" />
+        <state relative-caret-position="391">
+          <caret line="23" column="59" selection-start-line="23" selection-start-column="59" selection-end-line="23" selection-end-column="59" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
