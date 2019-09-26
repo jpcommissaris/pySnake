@@ -129,7 +129,7 @@ class Board:
         elif snake.direction == "RIGHT":
             self.move(snake, 0, 1)
         elif snake.direction == "LEFT":
-            self.move(snake, 0 ,-1)
+            self.move(snake, 0, -1)
 
     def move(self, snake, r, c):
         if snake.headR >= self.wSize-1 or snake.headR <= 0 or snake.headC >= self.lSize-1 or snake.headC <= 0: # borders
@@ -140,8 +140,10 @@ class Board:
             # checks collisions
             if self.board[snake.headR + r][snake.headC + c] == -1: # collides with pellet?
                 self.drawPellet()
-                snake.size+=5
-                print("collision")
+                if snake.player == 1:
+                    self.s1.size += 5
+                else:
+                    self.s2.size += 5
             if self.board[snake.headR + r][snake.headC + c] > 1:
                 self.gameOver(snake.player)
                 print("game over") # call a reset
@@ -154,16 +156,19 @@ class Board:
             self.board[snake.tailR][snake.tailC] = 0 # board
     # goes inside for loop
     def moveHelper(self,r,c):
-        if self.board[r][c] == self.s1.size or self.board[r][c] == self.s2.size:
+        if self.board[r][c] == self.s1.size:
+            self.board[r][c] = 0
+        if self.board[r][c] == self.s2.size:
             self.board[r][c] = 0
         if self.board[r][c] > 1:
-            self.board[r][c]+=1
+            self.board[r][c] += 1
 
     # Snake Object
     class Snake:
 
         def __init__(self, r, c, p):
             # pos of head
+            self.size = 0
             self.headR = r
             self.headC = c
             self.tailR = r-5
