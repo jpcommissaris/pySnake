@@ -21,7 +21,7 @@ class Board:
         self.board = []  # stores a number that will map tp a color
         self.set()
         # color dictionary
-        self.colorDic = {0: BLACK, -1: GREEN, 1: RED} #0 is the board, 1 is the head, -1 is a pellet
+        self.colorDic = {0: BLACK, -1: GREEN, 1: RED, 1.1: RED} #0 is the board, 1 is the head, -1 is a pellet
         #scores
         self.p1 = 0
         self.p2 = 0
@@ -34,7 +34,7 @@ class Board:
         self.s1 = self.Snake(9, 8, 1)
         self.s2 = self.Snake(9, self.lSize-8, 2)
         self.drawSnake(self.s1, self.s1.size)
-        self.drawSnake(self.s2, self.s1.size)
+        self.drawSnake(self.s2, int(self.s2.size-.1))
 
     # --- getters and setters ---
     def getSize(self):
@@ -81,8 +81,9 @@ class Board:
 
     # --- drawing ---
     def drawBoard(self, win):
-        self.moveSnake(self.s1)
         self.moveSnake(self.s2)
+        self.moveSnake(self.s1)
+
         for r in range(len(self.board)):
             for c in range(len(self.board[r])):
                 self.moveHelper(r, c)
@@ -149,18 +150,25 @@ class Board:
                 print("game over") # call a reset
                 return
             # moves
-            self.board[snake.headR][snake.headC] = 2 # first body part
-            snake.headR += r
-            snake.headC += c
-            self.board[snake.headR][snake.headC] = 1 # head
+            if snake.player == 1:
+                self.board[snake.headR][snake.headC] = 2 # first body part
+                snake.headR += r
+                snake.headC += c
+                self.board[snake.headR][snake.headC] = 1 # head
+            else:
+                self.board[snake.headR][snake.headC] = 2.1 # first body part
+                snake.headR += r
+                snake.headC += c
+                self.board[snake.headR][snake.headC] = 1.1 # head
             self.board[snake.tailR][snake.tailC] = 0 # board
+            #print(self.s1.size, self.s2.size)
     # goes inside for loop
     def moveHelper(self,r,c):
-        if self.board[r][c] == self.s1.size:
-            self.board[r][c] = 0
         if self.board[r][c] == self.s2.size:
             self.board[r][c] = 0
-        if self.board[r][c] > 1:
+        if self.board[r][c] == self.s1.size:
+            self.board[r][c] = 0
+        if self.board[r][c] > 1.1:
             self.board[r][c] += 1
 
     # Snake Object
