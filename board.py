@@ -69,12 +69,6 @@ class Board:
         if keys[pygame.K_RIGHT] or keys[pygame.K_QUOTE]:
             if self.s2.notAllowed != "RIGHT":
                 self.s2.direction = "RIGHT"
-        """
-        if keys[pygame.K_RETURN]:
-            self.s2.boost =True
-        if keys[pygame.K_LSHIFT]:
-            self.s1.boost =True
-        """
 
     def setBoard(self, l, w):
         self.board = []
@@ -86,10 +80,8 @@ class Board:
     def getColor(self, arg):
         return self.colorDic.get(arg, GREEN) # default is a body part
 
-
     # --- drawing ---
     def drawBoard(self, win):
-
         self.moveSnake(self.s1)
         self.moveSnake(self.s2)
         for r in range(len(self.board)):

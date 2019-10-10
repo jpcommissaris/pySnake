@@ -12,6 +12,8 @@ pygame.display.set_caption("Snake")
 
 clock = pygame.time.Clock()
 
+frame = 0
+
 
 # --- game loop ---
 SPEED = 15
@@ -23,7 +25,7 @@ while not done:
             done = True
 
     # --- scene logic ---
-
+    frame += 1
     b.setDirection()
 
     # --- repaints screen ---
