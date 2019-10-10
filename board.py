@@ -2,8 +2,9 @@ import pygame
 import random
 import time
 BLACK = (0,0,0) # if board[][] = 0
-GREEN = (0,255,0)
+GREEN = (30,200,30) # color creeds to my good friend stella  (before it was grey lol)
 RED = (255, 0, 0)
+BLUE = (50,180,180)
 GREY = (160,160,160)
 WHITE = (255,255,255)
 
@@ -21,10 +22,11 @@ class Board:
         self.board = []  # stores a number that will map tp a color
         self.set()
         # color dictionary
-        self.colorDic = {0: BLACK, -1: GREEN, 1: RED, 1.1: RED} #0 is the board, 1 is the head, -1 is a pellet
+        self.colorDic = {0: BLACK, -1: BLUE, 1: RED, 1.1: RED} #0 is the board, 1 is the head, -1 is a pellet
         #scores
         self.p1 = 0
         self.p2 = 0
+        self.game_over = False
 
     def set(self):
         self.setBoard(self.lSize, self.wSize)
@@ -55,18 +57,24 @@ class Board:
         if keys[pygame.K_d]:
             if self.s1.notAllowed != "RIGHT":
                 self.s1.direction = "RIGHT"
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_SEMICOLON]:
             if self.s2.notAllowed != "DOWN":
                 self.s2.direction = "DOWN"
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_p]:
             if self.s2.notAllowed != "UP":
                 self.s2.direction = "UP"
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_l]:
             if self.s2.notAllowed != "LEFT":
                 self.s2.direction = "LEFT"
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_QUOTE]:
             if self.s2.notAllowed != "RIGHT":
                 self.s2.direction = "RIGHT"
+        """
+        if keys[pygame.K_RETURN]:
+            self.s2.boost =True
+        if keys[pygame.K_LSHIFT]:
+            self.s1.boost =True
+        """
 
     def setBoard(self, l, w):
         self.board = []
@@ -76,14 +84,14 @@ class Board:
                 self.board[r].append(0)
 
     def getColor(self, arg):
-        return self.colorDic.get(arg, GREY) # default is a body part
+        return self.colorDic.get(arg, GREEN) # default is a body part
 
 
     # --- drawing ---
     def drawBoard(self, win):
-        self.moveSnake(self.s2)
-        self.moveSnake(self.s1)
 
+        self.moveSnake(self.s1)
+        self.moveSnake(self.s2)
         for r in range(len(self.board)):
             for c in range(len(self.board[r])):
                 self.moveHelper(r, c)
@@ -115,6 +123,7 @@ class Board:
 
     # --- logic ---
     def gameOver(self, player):
+        self.game_over = False
         if player == 1:
             self.p2 += 1
         if player == 2:
@@ -134,8 +143,7 @@ class Board:
 
     def move(self, snake, r, c):
         if snake.headR >= self.wSize-1 or snake.headR <= 0 or snake.headC >= self.lSize-1 or snake.headC <= 0: # borders
-            print("gameover")
-            self.gameOver(snake.player)
+            self.game_over = True
             return
         else:
             # checks collisions
@@ -146,9 +154,7 @@ class Board:
                 else:
                     self.s2.size += 5
             if self.board[snake.headR + r][snake.headC + c] > 1:
-                self.gameOver(snake.player)
-                print("game over") # call a reset
-                return
+                self.game_over = True
             # moves
             if snake.player == 1:
                 self.board[snake.headR][snake.headC] = 2 # first body part
@@ -161,6 +167,13 @@ class Board:
                 snake.headC += c
                 self.board[snake.headR][snake.headC] = 1.1 # head
             self.board[snake.tailR][snake.tailC] = 0 # board
+
+            if self.game_over:
+                self.gameOver(snake.player)
+                print("game over")  # call a reset
+                return
+
+
             #print(self.s1.size, self.s2.size)
     # goes inside for loop
     def moveHelper(self,r,c):
@@ -176,13 +189,13 @@ class Board:
 
         def __init__(self, r, c, p):
             # pos of head
-            self.size = 0
-            self.headR = r
-            self.headC = c
+            self.size = 0 # length of snake
+            self.headR = r # row of snakes head
+            self.headC = c # column of snakes head
             self.tailR = r-5
             self.tailC = c
             self.direction = "DOWN"
-            self.notAllowed = "UP"
+            self.notAllowed = "UP" # direction that cant be pressed
             self.player = p
             self.setSize()
         # ensures only legal moves are made
@@ -197,6 +210,7 @@ class Board:
                 self.notAllowed = "LEFT"
 
         def setSize(self):
+            # avoid conflicts with coloring, make the size different for each snake
             if self.player == 1:
                 self.size = 7
             else:
