@@ -134,10 +134,13 @@ class Board:
             self.move(snake, 0, -1)
 
     def move(self, snake, r, c):
+        print(snake.headR)
+        print(self.wSize-1)
         if snake.headR >= self.wSize-1 or snake.headR <= 0 or snake.headC >= self.lSize-1 or snake.headC <= 0: # borders
+            print('here')
             self.game_over = True
-            return
         else:
+            print('not here')
             # checks collisions
             if self.board[snake.headR + r][snake.headC + c] == -1: # collides with pellet?
                 self.drawPellet()
@@ -160,10 +163,10 @@ class Board:
                 self.board[snake.headR][snake.headC] = 1.1 # head
             self.board[snake.tailR][snake.tailC] = 0 # board
 
-            if self.game_over:
-                self.gameOver(snake.player)
-                print("game over")  # call a reset
-                return
+        if self.game_over:
+            self.gameOver(snake.player)
+            print("game over")  # call a reset
+            return
 
 
             #print(self.s1.size, self.s2.size)
